@@ -1,0 +1,45 @@
+# Local files
+.claude/
+*.local.json
+PROJECT_CONTEXT.md
+CLAUDE_NOTES.md
+*CLAUDE*.md
+GITHUB_COMMIT_RULES.md
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Data files (optional - uncomment if you don't want to track large data files)
+# input/
+# *.xlsx
+# *.csv
+
+# Output files (optional - uncomment if you don't want to track output)
+# output/
+# reports/
