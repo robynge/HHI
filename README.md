@@ -1,80 +1,45 @@
 # ARK ETF Portfolio Concentration Analysis
 
-A comprehensive analysis system for tracking ARK Invest ETF portfolio concentration using the Herfindahl-Hirschman Index (HHI), portfolio changes, and weight dynamics.
+Jupyter notebook for analyzing ARK Invest ETF portfolio concentration using HHI (Herfindahl-Hirschman Index) and tracking frequent drivers of daily P&L.
 
-## 📊 Features
+## Features
 
-### 1. HHI Concentration Analysis
-- Calculates Herfindahl-Hirschman Index for portfolio concentration measurement
-- HHI = Σ(weight²) where weights are in decimal format
-- Tracks effective number of stocks (1/HHI)
-- Daily tracking of concentration changes
+- **HHI Concentration**: Daily portfolio concentration tracking (HHI = Σ(weight²))
+- **ENH Metric**: Effective Number of Holdings (ENH = 1/HHI)
+- **P&L Attribution**: Identifies stocks contributing to 50% of daily profits/losses
+- **Visual Analytics**: Time series charts and frequency analysis
+- **Multi-ETF**: Supports all ARK ETFs (ARKK, ARKW, ARKQ, ARKF, ARKG, ARKX)
 
-### 2. Portfolio Changes Tracking
-- Daily monitoring of stock additions and removals
-- Comprehensive change history logging
-- Weight change analysis for existing holdings
-
-### 3. P&L Contribution Analysis
-- Identifies top profit contributors (stocks contributing to 50% of positive P&L)
-- Daily tracking of profit concentration
-- Performance attribution analysis
-
-### 4. Multi-ETF Support
-- Supports all ARK ETFs: ARKK, ARKW, ARKQ, ARKF, ARKG, ARKX
-- Batch processing for multiple ETFs
-- Configurable analysis periods
-
-## 📁 Project Structure
+## Project Structure
 
 ```
-HHI/
-├── input/                  # ETF data files (Excel format)
-│   ├── ARKK_Transformed_Data.xlsx
-│   ├── ARKW_Transformed_Data.xlsx
-│   └── ...
-├── code/                   # Source code
-│   ├── main.py            # Main entry point
-│   ├── data_loader.py     # Data loading from input folder
-│   ├── metrics.py         # HHI and P&L calculations
-│   ├── portfolio_changes.py  # Track stock additions/removals
-│   └── weight_changes.py  # Weight change analysis
-├── output/                 # Analysis results (Excel files)
-└── reports/               # Documentation and reports
+├── input/                  # ETF data files
+├── code/ARK_ETF_Analysis.ipynb  # Main notebook
+└── output/                 # Results (Excel + PNG charts)
 ```
 
-## ⚙️ Configuration
-
-Edit `code/main.py` to configure:
-
-```python
-# ETFs to analyze
-ETFS_TO_ANALYZE = ['ARKK', 'ARKW', 'ARKQ', 'ARKF', 'ARKG', 'ARKX']
-
-# Analysis period
-ANALYSIS_PERIOD = {
-    'start': '2024-04-01',
-    'end': datetime.now().strftime('%Y-%m-%d')  # Today
-}
-```
-
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
-# Run the analysis
 cd code
-python main.py
+jupyter notebook ARK_ETF_Analysis.ipynb
 ```
+
+Edit cell-3 to configure date range, then run all cells.
 
 ## 📈 Output Files
 
 Analysis results are saved in the `output/` directory:
 
-### Excel Files (per ETF)
-- `[ETF]_Analysis_YYYYMMDD.xlsx` containing:
-  - **Daily_HHI_Analysis**: HHI values, holdings count, top profit contributors
-  - **Portfolio_Changes**: Stock additions and removals
-  - **Weight_Changes**: Daily weight changes for all holdings
+### Per ETF Output
+1. **Excel File**: `[ETF]_Analysis_YYYYMMDD.xlsx`
+   - Sheet: Daily_HHI_Analysis
+   - Columns: Date, HHI, ENH, Holdings_Count, Top_50pct_Profit_Count, Top_50pct_Profit_Tickers, Top_50pct_Loss_Count, Top_50pct_Loss_Tickers
+
+2. **Visualization Charts** (PNG):
+   - `[ETF]_HHI_ENH_TimeSeries.png` - Dual chart showing HHI and ENH over time
+   - `[ETF]_Frequent_Drivers_50pct_Profits.png`
+   - `[ETF]_Frequent_Drivers_50pct_Losses.png`
 
 ## 📊 Key Metrics
 
@@ -112,20 +77,33 @@ Place ETF data files in `input/` folder:
 
 ### Python Dependencies
 ```bash
-pip install pandas numpy openpyxl
+pip install pandas numpy openpyxl matplotlib seaborn jupyter
 ```
 
 ## 🔍 Analysis Details
 
-### Daily Tracking
-- **HHI Calculation**: Sum of squared portfolio weights
-- **Holdings Count**: Number of non-cash positions
-- **Top Contributors**: Stocks contributing to 50% of daily positive P&L
+### Step 1: Load All ETF Data
+- Loads data from `input/[ETF]_Transformed_Data.xlsx`
+- Converts weights to decimal format if needed
+- Filters out cash positions (XX, MVRXX, DGCXX, FEDXX)
+- Applies selected date range filter
 
-### Portfolio Changes
-- Tracks when stocks enter or exit the portfolio
-- Records daily weight changes for all holdings
-- Identifies significant portfolio rebalancing events
+### Step 2: Calculate HHI and ENH
+- **HHI Formula**: Sum of squared portfolio weights (HHI = Σ(weight²))
+- **ENH Formula**: Effective Number of Holdings (ENH = 1/HHI)
+- Calculates both metrics for each day across all ETFs
+- Tracks holdings count (number of non-cash positions)
+
+### Step 3: Calculate P&L and Top Contributors
+- **Adjusted P&L**: Accounts for position changes and inflows/outflows
+- Identifies stocks contributing to 50% of daily profits
+- Identifies stocks contributing to 50% of daily losses
+- Saves results to Excel files
+
+### Step 4: Generate Visualizations
+- HHI/ENH dual time series chart with concentration thresholds
+- Frequency charts showing most common profit drivers (with gradient colors)
+- Frequency charts showing most common loss drivers (with gradient colors)
 
 ## 📝 Notes
 
